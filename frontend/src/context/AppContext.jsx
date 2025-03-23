@@ -27,6 +27,7 @@ const AppContextProvider = ({ children }) => {
         setUser(null);
       }
     } catch (error) {
+      setUser(null);
       console.log(error.message);
     }
   };
@@ -41,6 +42,7 @@ const AppContextProvider = ({ children }) => {
       }
     } catch (error) {
       setTasks([]);
+      setFilterTasks([]);
     }
   };
   useEffect(() => {
@@ -49,8 +51,9 @@ const AppContextProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    fetchTasks();
+    if (user) fetchTasks();
   }, [user]);
+  
 
   const values = {
     user,
