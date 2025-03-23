@@ -61,17 +61,23 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ success: false, message: "All fields are required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "All fields are required" });
     }
 
     const user = await userModel.findOne({ email });
     if (!user) {
-      return res.status(401).json({ success: false, message: "Invalid credentials" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid credentials" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ success: false, message: "Invalid credentials" });
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid credentials" });
     }
 
     const token = jwt.sign(
@@ -83,7 +89,7 @@ export const login = async (req, res) => {
     res
       .cookie("token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: true,
         sameSite: "None",
         maxAge: 24 * 60 * 60 * 1000,
       })
@@ -98,25 +104,33 @@ export const login = async (req, res) => {
           role: user.role,
         },
       });
-
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, message: "Server error. Please try again later." });
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Server error. Please try again later.",
+      });
   }
 };
 
-
 export const logout = async (req, res) => {
   try {
-    res.clearCookie("token", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "None", 
-      path: "/",
-    }).status(200).json({ success: true, message: "Logged out successfully" });
+    res
+      .clearCookie("token", {
+        path: "/",
+      })
+      .status(200)
+      .json({ success: true, message: "Logged out successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, message: "Server error. Please try again later." });
+    res
+      .status(500)
+      .json({
+        success: false,
+        message: "Server error. Please try again later.",
+      });
   }
 };
 
