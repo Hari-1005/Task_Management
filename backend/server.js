@@ -8,7 +8,7 @@ import taskRouter from "./routes/taskRouter.js";
 
 connectDB();
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cookieParser());
@@ -19,12 +19,13 @@ app.use(
   })
 );
 
-//api-endpoints
+// API endpoints
 app.use("/api/user", userRouter);
 app.use("/api/tasks", taskRouter);
 
 app.get("/", (req, res) => {
-  res.json("Api working");
+  res.json("API is working");
 });
 
-app.listen(port, () => console.log(`server is running on port ${port}`));
+app.listen(port, () => console.log(`Server is running on port ${port}`));
+
