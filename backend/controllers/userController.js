@@ -61,13 +61,17 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.json({ success: false, message: "All fields are required" });
+      return res.status(400).json({ success: false, message: "All fields are required" });
     }
 
     const user = await userModel.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ success: false, message: "Invalid credentials" });
+    }
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.json({ success: false, message: "Invalid credentials" });
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ success: false, message: "Invalid credentials" });
     }
 
     const token = jwt.sign(
@@ -79,13 +83,14 @@ export const login = async (req, res) => {
     res
       .cookie("token", token, {
         httpOnly: true,
-        secure: true,
-        sameSite: "Strict",
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "None",
         maxAge: 24 * 60 * 60 * 1000,
       })
+      .status(200)
       .json({
         success: true,
-        message: "logged in successfully",
+        message: "Logged in successfully",
         user: {
           id: user._id,
           name: user.name,
@@ -93,11 +98,13 @@ export const login = async (req, res) => {
           role: user.role,
         },
       });
+
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: error.message });
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error. Please try again later." });
   }
 };
+
 
 export const logout = async (req, res) => {
   try {
