@@ -1,0 +1,39 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "keywords": [
+    "task management",
+    "task management application",
+    "full-stack",
+    "full-stack application",
+    "express",
+    "mongodb",
+    "mongoose",
+    "restful api",
+    "api",
+    "nodejs",
+    "javascript",
+    "full-stack development",
+    "full-stack developer"
+  ],
+  "author": "hariteja",
+  "license": "ISC",
+  "description": "A full-stack application built with Nodejs, Expressjs, MongoDB, Mongoose to manage tasks efficiently. It provides a RESTful API to create, read, update and delete tasks. It also includes authentication and authorization features to ensure the security and integrity of data.",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.12.1",
+    "nodemon": "^3.1.9",
+    "validator": "^13.12.0"
+  }
+}
