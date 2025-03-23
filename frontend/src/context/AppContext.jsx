@@ -48,10 +48,6 @@ const AppContextProvider = ({ children }) => {
     fetchTasks();
   }, []);
 
-  useEffect(() => {
-    fetchTasks();
-  }, [user]);
-
   const values = {
     user,
     setUser,
