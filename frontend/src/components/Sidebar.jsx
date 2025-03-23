@@ -4,7 +4,6 @@ import { FaTasks } from "react-icons/fa";
 import { MdOutlinePendingActions } from "react-icons/md";
 import { TbProgressBolt } from "react-icons/tb";
 import { IoCheckmarkDone } from "react-icons/io5";
-import { AppContext } from "../context/AppContext";
 
 const Sidebar = () => {
   return (

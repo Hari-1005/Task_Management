@@ -6,8 +6,9 @@ import Filter from "../components/Filter";
 
 const PendingTasks = () => {
   const { filterTasks } = useContext(AppContext);
-  const filteredTasks =
-    filterTasks && filterTasks.filter((task) => task.status === "Pending");
+  const filteredTasks = filterTasks
+    ? filterTasks.filter((task) => task.status === "Pending")
+    : [];
 
   return (
     <div className="p-2 sm:p-4 w-full">
@@ -27,7 +28,7 @@ const PendingTasks = () => {
         </div>
       ) : (
         <div className="w-full h-[70vh] flex justify-center items-center">
-          <img className="sm:w-[30rem] mt-20" src={pending} />
+          <img className="sm:w-[30rem] mt-20" src={pending} alt="pending" />
         </div>
       )}
     </div>

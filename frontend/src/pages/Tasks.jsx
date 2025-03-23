@@ -11,7 +11,7 @@ const Tasks = () => {
     <div className="p-2 sm:p-4 w-full">
       <p className="text-lg font-medium">Tasks {`(${filterTasks.length})`}</p>
       <Filter />
-      {filterTasks.length ? (
+      {filterTasks.length > 0 ? (
         <div className="p-6 border border-gray-300 bg-white rounded w-full max-h-[80vh] overflow-y-auto flex flex-wrap gap-6 justify-start items-start">
           {filterTasks &&
             filterTasks.map((task, index) => (
@@ -22,7 +22,7 @@ const Tasks = () => {
         </div>
       ) : (
         <div className="w-full h-[70vh] flex justify-center items-center">
-          <img className="w-[40rem]" src={manage} />
+          <img className="w-[40rem]" src={manage} alt="no tasks available"/>
         </div>
       )}
     </div>

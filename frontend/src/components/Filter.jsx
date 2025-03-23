@@ -48,7 +48,7 @@ const Filter = () => {
     <div className="flex justify-between items-center mb-2">
       <div className="flex flex-col sm:flex-row sm:gap-3">
         {/* sort by task priority */}
-        <div class="inline-flex rounded-md shadow-xs" role="group">
+        <div className="inline-flex rounded-md shadow-xs" role="group">
           <button
             onClick={() => handleFilterSort("High", activeSort)}
             name="High"

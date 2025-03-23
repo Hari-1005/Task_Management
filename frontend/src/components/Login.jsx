@@ -1,4 +1,4 @@
-import React, { use, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -36,7 +36,7 @@ const Login = () => {
           toast.success("Registered Successfully");
           setState("Login");
         } else {
-          toast.error(data.message);
+          toast.error(error.response?.data?.message || "Something went wrong!");
         }
       }
     } catch (error) {
@@ -122,7 +122,7 @@ const Login = () => {
               <input
                 id="role"
                 type="checkbox"
-                value={role}
+                checked={role}
                 onChange={(e) => setRole(e.target.checked)}
               />
               <label
