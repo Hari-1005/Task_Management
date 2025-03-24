@@ -21,8 +21,7 @@ const Login = () => {
           { withCredentials: true }
         );
         if (data.success) {
-          toast.success(data.message);
-          console.log(data)
+          toast.success("Logged in successfully");
           setUser(data.user);
         } else {
           toast.error(data.message);
@@ -42,7 +41,6 @@ const Login = () => {
       }
     } catch (error) {
       toast.error(error.message);
-      console.log("Error", error);
     }
   };
 

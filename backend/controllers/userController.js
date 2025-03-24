@@ -91,7 +91,6 @@ export const login = async (req, res) => {
         sameSite: "None",
         maxAge: 24 * 60 * 60 * 1000,
       })
-      .status(200)
       .json({
         success: true,
         message: "Logged in successfully",
@@ -104,7 +103,7 @@ export const login = async (req, res) => {
       });
   } catch (error) {
     console.error(error);
-    res.status(500).json({
+    res.json({
       success: false,
       message: "Server error. Please try again later.",
     });
@@ -120,11 +119,10 @@ export const logout = async (req, res) => {
         sameSite: "None",
         path: "/",
       })
-      .status(200)
       .json({ success: true, message: "Logged out successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({
+    res.json({
       success: false,
       message: "Server error. Please try again later.",
     });
