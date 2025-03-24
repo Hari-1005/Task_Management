@@ -21,7 +21,7 @@ const Login = () => {
           { withCredentials: true }
         );
         if (data.success) {
-          toast.success("Logged in successfully");
+          toast.success(data.message);
           setUser(data.user);
         } else {
           toast.error(data.message);
@@ -33,10 +33,10 @@ const Login = () => {
           { withCredentials: true }
         );
         if (data.success) {
-          toast.success("Registered Successfully");
+          toast.success(data.message);
           setState("Login");
         } else {
-          toast.error(error.response?.data?.message || "Something went wrong!");
+          toast.error(data.message);
         }
       }
     } catch (error) {

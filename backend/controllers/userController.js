@@ -49,7 +49,7 @@ export const registration = async (req, res) => {
 
     res
       .status(201)
-      .json({ success: true, message: "user registered successfully" });
+      .json({ success: true, message: "registered successfully" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: error.message });
