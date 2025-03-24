@@ -15,9 +15,9 @@ const App = () => {
   const { user } = useContext(AppContext);
   return user ? (
     <div className="bg-[#F8F9FD]">
+      <ToastContainer />
       <Navbar />
       <AddTask />
-      <ToastContainer />
       <div className="flex items-start">
         <Sidebar />
         <div className="w-full">
@@ -33,8 +33,8 @@ const App = () => {
     </div>
   ) : (
     <>
-      <Login />
       <ToastContainer />
+      <Login />
     </>
   );
 };
