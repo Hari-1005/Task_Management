@@ -22,6 +22,7 @@ const Login = () => {
         );
         if (data.success) {
           toast.success(data.message);
+          console.log(data)
           setUser(data.user);
         } else {
           toast.error(data.message);
@@ -41,6 +42,7 @@ const Login = () => {
       }
     } catch (error) {
       toast.error(error.message);
+      console.log("Error", error);
     }
   };
 
