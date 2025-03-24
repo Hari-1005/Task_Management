@@ -20,6 +20,7 @@ const Login = () => {
           { email, password },
           { withCredentials: true }
         );
+        console.log(data);
         if (data.success) {
           toast.success(data.message);
           setUser(data.user);
@@ -32,6 +33,7 @@ const Login = () => {
           { name, email, password, role },
           { withCredentials: true }
         );
+        console.log(data)
         if (data.success) {
           toast.success(data.message);
           setState("Login");

@@ -28,7 +28,6 @@ const AppContextProvider = ({ children }) => {
       }
     } catch (error) {
       setUser(null);
-      console.log(error.message);
     }
   };
   const fetchTasks = async () => {
