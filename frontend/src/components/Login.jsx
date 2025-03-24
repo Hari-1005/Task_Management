@@ -24,8 +24,10 @@ const Login = () => {
         if (data.success) {
           toast.success(data.message);
           setUser(data.user);
+          console.log(data);
         } else {
           toast.error(data.message);
+          console.log(data);
         }
       } else {
         const { data } = await axios.post(
@@ -37,12 +39,15 @@ const Login = () => {
         if (data.success) {
           toast.success(data.message);
           setState("Login");
+          console.log(data)
         } else {
+          console.log(data)
           toast.error(data.message);
         }
       }
     } catch (error) {
       toast.error(error.message);
+      console.log("error" ,data)
     }
   };
 
