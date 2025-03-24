@@ -8,7 +8,6 @@ export const registration = async (req, res) => {
 
     if (!name || !email || !password) {
       return res
-        .status(400)
         .json({ success: false, message: "All fields are required" });
     }
 
@@ -48,7 +47,6 @@ export const registration = async (req, res) => {
     await userModel.create(userData);
 
     res
-      .status(201)
       .json({ success: true, message: "registered successfully" });
   } catch (error) {
     console.log(error);
@@ -62,7 +60,6 @@ export const login = async (req, res) => {
 
     if (!email || !password) {
       return res
-        .status(400)
         .json({ success: false, message: "All fields are required" });
     }
 
