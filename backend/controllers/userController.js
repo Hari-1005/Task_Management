@@ -46,8 +46,7 @@ export const registration = async (req, res) => {
 
     await userModel.create(userData);
 
-    res
-      .json({ success: true, message: "registered successfully" });
+    res.json({ success: true, message: "registered successfully" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: error.message });
@@ -112,7 +111,7 @@ export const logout = async (req, res) => {
     res
       .clearCookie("token", {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: true,
         sameSite: "None",
         path: "/",
       })

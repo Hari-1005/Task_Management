@@ -1,9 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { FaEdit, FaTrash, FaCheck } from "react-icons/fa";
-import { AppContext } from "../context/AppContext";
 import { toast } from "react-toastify";
-import axios from "axios";
 import EditTask from "./EditTask";
+import { useSelector } from "react-redux";
+import { useDeleteTaskMutation, useEditTaskMutation } from "../app/features/tasks/tasksApi";
 
 const calculateDueDays = (dueDate) => {
   const today = new Date();
@@ -33,18 +33,16 @@ const getBadgeStyle = (type, value) => {
 };
 
 const TaskCard = ({ task }) => {
-  const { user, backendUrl, fetchTasks } = useContext(AppContext);
+  const {user} = useSelector((store) => store.auth)
+  const [deleteTask] = useDeleteTaskMutation();
+  const [editTask] = useEditTaskMutation();
   const [editTaskPopup, setEditTaskPopup] = useState(false);
 
-  const deleteTask = async () => {
+  const handleDeleteTask = async () => {
     try {
-      const { data } = await axios.delete(
-        backendUrl + "/api/tasks/" + task._id,
-        { withCredentials: true }
-      );
+      const data = await deleteTask(task._id).unwrap();
       if (data.success) {
         toast.success(data.message);
-        fetchTasks();
       } else {
         toast.error(data.message);
       }
@@ -53,16 +51,11 @@ const TaskCard = ({ task }) => {
     }
   };
 
-  const updateTask = async () => {
+  const handleUpdateTask = async () => {
     try {
-      const { data } = await axios.patch(
-        backendUrl + "/api/tasks/" + task._id,
-        { status: "Completed" },
-        { withCredentials: true }
-      );
+      const data = await editTask({ id:task._id, taskData:{status : "Completed"}}).unwrap();
       if (data.success) {
         toast.success(data.message);
-        fetchTasks();
       } else {
         toast.error(data.message);
       }
@@ -118,7 +111,7 @@ const TaskCard = ({ task }) => {
         )}
 
         <button
-          onClick={deleteTask}
+          onClick={handleDeleteTask}
           className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 text-sm rounded-md hover:bg-red-500 transition cursor-pointer"
         >
           <FaTrash /> Delete
@@ -126,7 +119,7 @@ const TaskCard = ({ task }) => {
 
         {task.status !== "Completed" && user.role === "user" && (
           <button
-            onClick={updateTask}
+            onClick={handleUpdateTask}
             className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 text-sm rounded-md hover:bg-green-500 transition cursor-pointer"
           >
             <FaCheck /> Finish

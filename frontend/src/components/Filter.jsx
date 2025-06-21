@@ -1,33 +1,34 @@
 import React, { useContext, useEffect, useState } from "react";
-import { AppContext } from "../context/AppContext";
+import { useDispatch, useSelector } from "react-redux";
+import AddTask from "./AddTask";
+import { setActivePriority, setActiveSort } from "../app/features/filter/filterSlice";
+import { setTasks } from "../app/features/tasks/tasksSlice";
+import { useGetTasksQuery } from "../app/features/tasks/tasksApi";
 
 const Filter = () => {
-  const {
-    user,
-    tasks,
-    setAddTaskPopup,
-    setFilterTasks,
-    activePriority,
-    setActivePriority,
-    activeSort,
-    setActiveSort,
-  } = useContext(AppContext);
+  const {user} = useSelector((state) => state.auth)
+  const {data : {tasks}} = useGetTasksQuery();
+  const dispatch = useDispatch();
+  const [addTaskPopup, setAddTaskPopup] = useState(false);
+  const activeSort = useSelector((state) => state.filter.activeSort);
+  const activePriority = useSelector((state) => state.filter.activePriority);
 
-  const filterByPriority = (priority) => {
+  
+const filterByPriority = (priority) => {
     if (activePriority === priority) {
-      setActivePriority(null);
+      dispatch(setActivePriority(null))
       return tasks; // Reset to all tasks
     } else {
-      setActivePriority(priority);
+      dispatch(setActivePriority(priority))
       return tasks.filter((task) => task.priority === priority);
     }
   };
   const sortByDueDate = (tasksList, order) => {
     if (activeSort === order) {
-      setActiveSort(null);
+      dispatch(setActiveSort(null))
       return tasksList; // Reset sorting
     } else {
-      setActiveSort(order);
+      dispatch(setActiveSort(order))
       return [...tasksList].sort((a, b) => {
         return order === "asc"
           ? new Date(a.dueDate) - new Date(b.dueDate)
@@ -41,10 +42,11 @@ const Filter = () => {
     let sortedTasks = order
       ? sortByDueDate(filteredTasks, order)
       : filteredTasks;
-    setFilterTasks(sortedTasks);
+    dispatch(setTasks(sortedTasks));
   };
 
   return (
+    <>
     <div className="flex justify-between items-center mb-2">
       <div className="flex flex-col sm:flex-row sm:gap-3">
         {/* sort by task priority */}
@@ -128,6 +130,8 @@ const Filter = () => {
         )}
       </div>
     </div>
+    {addTaskPopup && <AddTask addTaskPopup={addTaskPopup} setAddTaskPopup={setAddTaskPopup} />}
+    </>
   );
 };
 

@@ -1,12 +1,11 @@
-import React, { useContext, useState } from "react";
-import { AppContext } from "../context/AppContext";
+import React, { useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import { toast } from "react-toastify";
-import axios from "axios";
+import { useAddTaskMutation } from "../app/features/tasks/tasksApi";
 
-const AddTask = () => {
-  const { backendUrl, addTaskPopup, setAddTaskPopup, fetchTasks } =
-    useContext(AppContext);
+
+const AddTask = ({addTaskPopup, setAddTaskPopup}) => {
+  const [addTask] = useAddTaskMutation();
   const [taskData, setTaskData] = useState({
     title: "",
     description: "",
@@ -22,15 +21,10 @@ const AddTask = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post(
-        backendUrl + "/api/tasks/create",
-        taskData,
-        { withCredentials: true }
-      );
+      const data = await addTask(taskData).unwrap();
       if (data.success) {
         toast.success(data.message);
         setAddTaskPopup(false);
-        fetchTasks();
         setTaskData({
           title: "",
           description: "",
@@ -48,7 +42,7 @@ const AddTask = () => {
   };
   return (
     addTaskPopup && (
-      <div className="absolute w-full h-screen bg-gray-200/90">
+      <div className="absolute w-full h-screen bg-gray-200/90 z-20 left-0 top-0">
         <form onSubmit={handleSubmit}>
           <div className="max-w-md mx-auto mt-20 bg-white shadow-md rounded-lg p-5 relative">
             <div

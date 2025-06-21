@@ -1,20 +1,22 @@
 import React, { useContext } from "react";
 import { AppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
+import { useLogoutMutation } from "../app/features/auth/authApi";
+import { useDispatch, useSelector } from "react-redux";
+import { clearAuth } from "../app/features/auth/authSlice";
 
 const Navbar = () => {
-  const { user, setUser, backendUrl, setAddTaskPopup } = useContext(AppContext);
+  const {user} = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
+  const [logoutUser, {isLoading}] = useLogoutMutation();
   const navigate = useNavigate();
   const logout = async () => {
     try {
-      const { data } = await axios.get(backendUrl + "/api/user/logout", {
-        withCredentials: true,
-      });
+      const data = await logoutUser().unwrap();
       if (data.success) {
+        dispatch(clearAuth());
         toast.success(data.message);
-        setUser(null);
         navigate("/");
       } else {
         toast.error(data.message);
@@ -27,7 +29,7 @@ const Navbar = () => {
     <div className="flex justify-between items-center h-16 px-3 sm:px-10 py-3 bg-white border-b border-gray-200">
       <h1
         onClick={() => {
-          navigate("/"), setAddTaskPopup(false);
+          navigate("/");
         }}
         className="text-2xl font-semibold cursor-pointer text-blue-700"
       >

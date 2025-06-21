@@ -2,9 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import { useLoginMutation, useRegisterMutation } from "../app/features/auth/authApi";
+import { setCredentials } from "../app/features/auth/authSlice";
 
 const Login = () => {
-  const { setUser, backendUrl } = useContext(AppContext);
+  const [loginUser, {isSuccess, isLoading, isError}] = useLoginMutation();
+  const [registerUser, {isSuccess: isRegisterSuccess, isLoading: isRegisterLoading, isError: isRegisterError}] = useRegisterMutation();
+  const dispatch = useDispatch();
   const [state, setState] = useState("Login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -15,23 +20,16 @@ const Login = () => {
     e.preventDefault();
     try {
       if (state === "Login") {
-        const { data } = await axios.post(
-          backendUrl + "/api/user/login",
-          { email, password },
-          { withCredentials: true }
-        );
+        const data = await loginUser({email, password}).unwrap();
         if (data.success) {
-          toast.success("Logged in successfully");
-          setUser(data.user);
+          dispatch(setCredentials(data?.user))
+          toast.success(data.message);
+          // setUser(data?.user);
         } else {
           toast.error(data.message);
         }
       } else {
-        const { data } = await axios.post(
-          backendUrl + "/api/user/register",
-          { name, email, password, role },
-          { withCredentials: true }
-        );
+        const data = await registerUser({name,email,password,role}).unwrap();
         if (data.success) {
           toast.success(data.message);
           setState("Login");
@@ -92,8 +90,15 @@ const Login = () => {
         <button
           className="bg-blue-600 py-2 rounded text-white my-2 cursor-pointer"
           type="submit"
+          disabled={isLoading}
         >
-          {state === "Login" ? "Login" : "Submit"}
+          {isLoading || isRegisterLoading ? (
+            <div className="flex items-center justify-center">
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+            </div>
+          ) : (
+            state === "Login" ? "Login" : "Submit"
+          )}
         </button>
 
         {state === "Login" ? (

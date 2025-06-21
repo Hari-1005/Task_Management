@@ -3,11 +3,22 @@ import { AppContext } from "../context/AppContext";
 import TaskCard from "../components/TaskCard";
 import { completed } from "../assets/assets";
 import Filter from "../components/Filter";
+import { useGetTasksQuery } from "../app/features/tasks/tasksApi";
+import { useSelector } from "react-redux";
 
 const CompletedTasks = () => {
-  const { filterTasks } = useContext(AppContext);
+  const { data, isLoading } = useGetTasksQuery();
+  const {tasks} = useSelector((store)=>store.tasks);
   const filteredTasks =
-    filterTasks && filterTasks.filter((task) => task.status === "Completed");
+    tasks && tasks.filter((task) => task.status === "Completed");
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-2 sm:p-4 w-full">

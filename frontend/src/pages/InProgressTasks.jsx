@@ -3,11 +3,22 @@ import { AppContext } from "../context/AppContext";
 import TaskCard from "../components/TaskCard";
 import { inProgress } from "../assets/assets";
 import Filter from "../components/Filter";
+import { useSelector } from "react-redux";
+import { useGetTasksQuery } from "../app/features/tasks/tasksApi";
 
 const InProgressTasks = () => {
-  const { filterTasks } = useContext(AppContext);
+  const { data, isLoading } = useGetTasksQuery();
+  const {tasks} = useSelector((store)=>store.tasks);
   const filteredTasks =
-    filterTasks && filterTasks.filter((task) => task.status === "In-Progress");
+    tasks && tasks.filter((task) => task.status === "In-Progress");
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-2 sm:p-4 w-full">

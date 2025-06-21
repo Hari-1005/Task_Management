@@ -2,12 +2,13 @@ import React, { useContext, useState } from "react";
 import { AppContext } from "../context/AppContext";
 import { RxCross1 } from "react-icons/rx";
 import { toast } from "react-toastify";
-import axios from "axios";
+import { useEditTaskMutation, useGetTasksQuery } from "../app/features/tasks/tasksApi";
 
 const EditTask = ({ id, setEditTaskPopup }) => {
-  const { tasks, backendUrl, fetchTasks } = useContext(AppContext);
+  const { data } = useGetTasksQuery();
+  const [editTask] = useEditTaskMutation();
 
-  const task = tasks.find((task) => task._id === id);
+  const task = data?.tasks.find((task) => task._id === id);
 
   const [taskData, setTaskData] = useState({
     title: task.title,
@@ -24,15 +25,11 @@ const EditTask = ({ id, setEditTaskPopup }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.patch(
-        backendUrl + "/api/tasks/" + id,
-        taskData,
-        { withCredentials: true }
-      );
+      const data = await editTask({ id, taskData }).unwrap();
+      console.log(data);
       if (data.success) {
         toast.success(data.message);
         setEditTaskPopup(false);
-        fetchTasks();
         setTaskData({
           title: "",
           description: "",
