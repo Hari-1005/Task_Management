@@ -7,7 +7,7 @@ import { useGetTasksQuery } from "../app/features/tasks/tasksApi";
 
 const Filter = () => {
   const {user} = useSelector((state) => state.auth)
-  const {data : {tasks}} = useGetTasksQuery();
+  const {data} = useGetTasksQuery();
   const dispatch = useDispatch();
   const [addTaskPopup, setAddTaskPopup] = useState(false);
   const activeSort = useSelector((state) => state.filter.activeSort);
@@ -17,10 +17,10 @@ const Filter = () => {
 const filterByPriority = (priority) => {
     if (activePriority === priority) {
       dispatch(setActivePriority(null))
-      return tasks; // Reset to all tasks
+      return data?.tasks; // Reset to all tasks
     } else {
       dispatch(setActivePriority(priority))
-      return tasks.filter((task) => task.priority === priority);
+      return data?.tasks.filter((task) => task.priority === priority);
     }
   };
   const sortByDueDate = (tasksList, order) => {
@@ -38,7 +38,7 @@ const filterByPriority = (priority) => {
   };
 
   const handleFilterSort = (priority = activePriority, order = activeSort) => {
-    let filteredTasks = priority ? filterByPriority(priority) : tasks;
+    let filteredTasks = priority ? filterByPriority(priority) : data?.tasks;
     let sortedTasks = order
       ? sortByDueDate(filteredTasks, order)
       : filteredTasks;
